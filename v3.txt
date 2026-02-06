@@ -1,0 +1,45 @@
+Classes:
+
+1. IDGenerato
+2. Item
+3. Order
+
+Rotas:
+
+/create/add/ - Criar e adicionar pedidos a uma mesa.
+post/ - Busca todos ou um pedido em específico.
+/put/ - atualiza os pedidos de uma mesa.
+/delete/ - Deleta uma ou todas às mesas.
+
+Tipos de Requisições:
+
+post - criar a comanda - Feito
+get - Buscar a comanda - Feito
+put - atualizar os dados da comanda - Feito
+delete - deletar a comanda - Feito
+
+Funcionalidades:
+
+1. criar a comanda.
+2. atualizar a comanda(caso tenha algum item errado).
+3. buscar a comanda.
+4. deletar a comanda
+
+formato de armazenamento:
+
+data = [
+    {
+        "table_number": 10,
+        "order_id": 1,
+        "items": [
+            {
+                "item_number": "",
+                "main_course": "",
+                "drink": "",
+                "salad": "",
+                "creation_date": "",
+                "creation_time": "",
+            }
+        ]
+    }
+]
