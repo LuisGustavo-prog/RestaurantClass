@@ -39,6 +39,7 @@ data = [
                 "salad": "",
                 "creation_date": "",
                 "creation_time": "",
+                "items": []
             }
         ]
     }

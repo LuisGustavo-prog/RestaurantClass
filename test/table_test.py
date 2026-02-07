@@ -4,6 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.models.order import Order
+from src.entities.waiter import Waiter
 
 # Teste no terminal
 
