@@ -4,7 +4,6 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.entities.waiter import Waiter
-from src.utils.validators import cpf_validator
 
 waiter1 = Waiter(
     name='João Silva',

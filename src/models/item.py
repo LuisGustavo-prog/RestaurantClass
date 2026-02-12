@@ -3,21 +3,11 @@ from datetime import datetime
 
 class Item:
     _order_list = []
-    _table_order_ids = {}  
-
-    @classmethod
-    def get_or_create_order_id(cls, table_number: int) -> int:  
-        if table_number not in cls._table_order_ids: 
-            new_id = IDGenerato.generate()
-
-            cls._table_order_ids[table_number] = new_id 
-
-        return cls._table_order_ids[table_number]
     
     @classmethod
     def add_item(cls, table_number: int, order_id: int = '', main_course: str = '', drink: str = '', salad: str = '') -> None:
         if order_id == '':
-            order_id = cls.get_or_create_order_id(table_number=table_number)
+            order_id = IDGenerato.get_or_create_order_id(table_number=table_number)
     
         new_item = {
             'item_number': 1,
