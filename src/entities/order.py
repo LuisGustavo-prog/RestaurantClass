@@ -1,4 +1,4 @@
-from src.models.item import Item
+from src.entities.item import Item
 from typing import Union
 
 class Order:

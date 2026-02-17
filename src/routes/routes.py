@@ -1,4 +1,4 @@
-from src.models.order import Order
+from src.entities.order import Order
 from src.schema.delete_user_schema import DeleteUserSchema
 from src.schema.put_user_schema import PutUserSchema
 from src.schema.post_user_schema import PostUserSchema 

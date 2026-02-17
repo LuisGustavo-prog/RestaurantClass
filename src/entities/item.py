@@ -1,4 +1,4 @@
-from src.models.id_generetor import IDGenerato
+from src.entities.id_generetor import IDGenerato
 from datetime import datetime
 
 class Item:
