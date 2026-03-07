@@ -1,4 +1,4 @@
-from src.entities.id_generetor import IDGenerato
+from src.utils.id_generator import IDGenerato
 from datetime import datetime
 from src.utils.validators import cpf_validator, name_validator
 
