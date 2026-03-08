@@ -1,6 +1,5 @@
-from src.database.connection import orders_collection
+from src.database.connection import orders_collection, menu_collection
 from src.entities.item import Item
-from typing import Union
 
 class Order:
     def __init__(self, table_number: int, main_course: str = '', drink: str = '', starter: str = ''):
@@ -28,15 +27,68 @@ class Order:
         order = orders_collection.find_one({'table_number': table_number}, {'_id': 0})
 
         if order is None:
-            return {'error': True, 'message': f'Mesa {table_number} não encontrada.'}
+            return {'error': True, 'message': f'Table {table_number} not found.'}
         
         return order
 
     @classmethod
-    def put_order(cls, table_number: int, item_number: int, new_main_course: str = '', new_drink: str = '', new_starter: str = ''):
-        pass
+    def put_order(cls, table_number: int, item_id: int, new_main_course: str = '', new_drink: str = '', new_starter: str = ''):
+        order = orders_collection.find_one({'table_number': table_number}, {'_id': 0})
+
+        if order is None:
+            return {'error': True, 'message': f'Table {table_number} not found.'}
+        
+        new_main_course_data = menu_collection.find_one({'name': new_main_course})
+        new_drink_data       = menu_collection.find_one({'name': new_drink})
+        new_starter_data     = menu_collection.find_one({'name': new_starter})
+
+        orders_collection.update_one({'table_number': table_number, 'items.item_id': item_id}, {
+            '$set': {
+                'items.$.main_course':       new_main_course,
+                'items.$.main_course_price': new_main_course_data['price'] if new_main_course_data else 0,
+                'items.$.drink':             new_drink,
+                'items.$.drink_price':       new_drink_data['price']       if new_drink_data       else 0,
+                'items.$.starter':           new_starter,
+                'items.$.starter_price':     new_starter_data['price']     if new_starter_data     else 0,
+            }
+        })
+
+        order_update = orders_collection.find_one({'table_number': table_number})
+
+        new_price = sum(
+            item['main_course_price'] + item['drink_price'] + item['starter_price']
+            for item in order_update['items']
+        )
+
+        orders_collection.update_one({'table_number': table_number}, {'$set': {'total_price': new_price}})
+
+        return {'error': False, 'message': 'Order updated successfully!'}
 
     @classmethod
-    def delete_order(cls, table_number: int = None, item_number: int = None, type_of_choice: str = 'all'):
-        pass
-            
+    def delete_order(cls, table_number: int):
+        order = orders_collection.find_one({'table_number': table_number}, {'_id': 0})
+
+        if order is None:
+            return {'error': True, 'message': f'Table {table_number} not found.'}
+        
+        orders_collection.update_one(
+            {'table_number': table_number},
+            {'$set': {'items': [], 'total_items': 0, 'total_price': 0}}
+        )
+
+    @classmethod
+    def delete_item(cls, table_number: int, item_id: int):
+        order = orders_collection.find_one({'table_number': table_number}, {'_id': 0})
+
+        if order is None:
+            return {'error': True, 'message': f'Table {table_number} not found.'}
+        
+        item = next((data for data in order['items'] if data['item_id'] == item_id), None)
+
+        if item is None:
+            return {'error': True, 'message': f'Item {item_id} not found.'}
+        
+        orders_collection.update_one(
+            {'table_number': table_number},
+            {'$pull': {'items': {'item_id': item_id}}}
+        )

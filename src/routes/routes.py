@@ -1,5 +1,5 @@
 from src.entities.order import Order
-from src.schema.delete_user_schema import DeleteUserSchema
+from src.schema.delete_user_schema import DeleteItemSchema, DeleteOrderSchema
 from src.schema.put_user_schema import PutUserSchema
 from src.schema.post_user_schema import PostUserSchema 
 from fastapi import FastAPI
@@ -25,23 +25,23 @@ def get_menu_by_category(category: str):
 def get_menu_by_name(name: str):
     return Menu.get_by_name(name=name)
 
-
-@app.post('/post/')
-def post_command(data: PostUserSchema): 
+@app.post('/orders/')
+def create_order(data: PostUserSchema): 
     Order(table_number=data.table_number, main_course=data.main_course, drink=data.drink, starter=data.starter)
-
     return data
 
-@app.get('/get/')
-def get_command(table_number: int = None):
+@app.get('/orders/')
+def get_order(table_number: int = None):
     return Order.get_order(table_number=table_number)
 
-@app.put('/put/')
-def put_command(data: PutUserSchema):
-    result_put = Order.put_order(table=data.table, item_number=data.item, new_main_course=data.new_main_course, new_drink=data.new_drink, new_starter=data.new_starter)
+@app.put('/orders/')
+def update_order(data: PutUserSchema):
+    return Order.put_order(table_number=data.table_number, item_id=data.item_id, new_main_course=data.new_main_course, new_drink=data.new_drink, new_starter=data.new_starter)
 
-    return result_put
+@app.delete('/orders/')
+def delete_order(data: DeleteOrderSchema):
+    return Order.delete_order(table_number=data.table_number)
 
-@app.delete('/delete/')
-def delete_command(data: DeleteUserSchema):
-    return Order.delete_order(table_number=data.table_number, item_number=data.item_number, type_of_choice=data.type_of_choice)
+@app.delete('/orders/item/')
+def delete_item(data: DeleteItemSchema):
+    return Order.delete_item(table_number=data.table_number, item_id=data.item_id)
