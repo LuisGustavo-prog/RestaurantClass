@@ -1,5 +1,5 @@
 from fastapi.responses import HTMLResponse
-from src.routes.routes import app
+from src.routes.order_routes import app
 
 @app.get('/', response_class=HTMLResponse)
 def home():

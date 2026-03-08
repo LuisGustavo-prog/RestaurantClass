@@ -12,6 +12,7 @@ try:
 
     orders_collection = db['orders']
     menu_collection = db['menu']
+    waiter_collection = db['waiters']
 except Exception as e:
     print(f'Error: Error connecting to the database. {e}')
     raise
