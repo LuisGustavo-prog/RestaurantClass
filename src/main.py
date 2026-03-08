@@ -1,4 +1,4 @@
-from src.routes.order_routes import app
+from src.app import app
 from src.templates.page import home
 from fastapi.responses import HTMLResponse
 from src.database.menu_data import populate_menu

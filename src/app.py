@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from src.routes.waiters_routes import waiter
+from src.routes.order_routes import orders
+from src.routes.menu_routes import menu
 
 app = FastAPI(
     title="API Comanda - Sistema de Pedidos",
@@ -10,3 +12,7 @@ app = FastAPI(
 )
 
 app.include_router(waiter)
+
+app.include_router(menu)
+
+app.include_router(orders)

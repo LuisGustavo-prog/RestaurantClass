@@ -1,18 +1,8 @@
 # orders_controller.py
 from src.entities.order import Order
-from src.entities.menu import Menu
 from src.schema.delete_user_schema import DeleteItemSchema, DeleteOrderSchema
 from src.schema.post_user_schema import PostUserSchema
 from src.schema.put_user_schema import PutUserSchema
-
-def controller_get_menu():
-    return Menu.get_menu()
-
-def controller_get_menu_by_category(category: str):
-    return Menu.get_by_category(category=category)
-
-def controller_get_menu_by_name(name: str):
-    return Menu.get_by_name(name=name)
 
 def controller_create_order(data: PostUserSchema):
     Order(table_number=data.table_number, main_course=data.main_course, drink=data.drink, starter=data.starter)

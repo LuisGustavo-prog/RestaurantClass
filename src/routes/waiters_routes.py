@@ -1,5 +1,10 @@
 from fastapi import APIRouter
-
+# from src.controllers.waiters_controller import (
+#     controller_create_waiter,
+#     controller_get_waiters,
+#     controller_update_waiter,
+#     controller_delete_waiter
+# )
 waiter = APIRouter()
 
 @waiter.post('/waiters/')
