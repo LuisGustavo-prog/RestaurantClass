@@ -7,8 +7,13 @@ class Item:
         main_course_data = menu_collection.find_one({'name': main_course})
         drink_data       = menu_collection.find_one({'name': drink})
         starter_data     = menu_collection.find_one({'name': starter})
+
+        table_order = orders_collection.find_one({
+            'table_number': table_number,
+        })
         
         new_item = {
+            'item_id':           1 if table_order is None else len(table_order['items']) + 1,
             'main_course':       main_course,
             'main_course_price': main_course_data['price'] if main_course_data else 0,
             'drink':             drink,
@@ -18,10 +23,6 @@ class Item:
         }
 
         item_total = new_item['main_course_price'] + new_item['drink_price'] + new_item['starter_price']
-
-        table_order = orders_collection.find_one({
-            'table_number': table_number,
-        })
 
         if table_order is None:
             orders_collection.insert_one({
@@ -40,3 +41,4 @@ class Item:
                     '$inc': {'total_items': 1, 'total_price': item_total}
                 }
             )
+            
