@@ -27,67 +27,21 @@ def get_menu_by_name(name: str):
 
 
 @app.post('/post/')
-def post_command(data: PostUserSchema): # Mudar para schema
-    """
-    Cria um novo pedido para uma mesa.
-    
-    Args:
-        table_number: Número da mesa
-        main_course: Prato principal (opcional)
-        drink: Bebida (opcional)
-        salad: Salada (opcional)
-    
-    Returns:
-        dict: Dados do pedido criado
-    """
-    Order(table_number=data.table_number, main_course=data.main_course, drink=data.drink, salad=data.salad)
+def post_command(data: PostUserSchema): 
+    Order(table_number=data.table_number, main_course=data.main_course, drink=data.drink, starter=data.starter)
 
     return data
 
 @app.get('/get/')
-def get_command(table: int = None, type_of_choice: str = 'all'):
-    """
-    Busca pedidos do sistema.
-    
-    Args:
-        table: Número da mesa para busca específica (opcional)
-        type_of_choice: Tipo de busca - 'all' para todos os pedidos ou 'specific' para um pedido específico
-    
-    Returns:
-        str: Dados do(s) pedido(s) encontrado(s)
-    """
-    return Order.get_order(table=table, type_of_choice=type_of_choice)
+def get_command(table_number: int = None):
+    return Order.get_order(table_number=table_number)
 
 @app.put('/put/')
 def put_command(data: PutUserSchema):
-    """
-    Atualiza um item específico de um pedido.
-    
-    Args:
-        table: Número da mesa
-        item: Número do item a ser atualizado
-        new_main_course: Novo prato principal (opcional)
-        new_drink: Nova bebida (opcional)
-        new_salad: Nova salada (opcional)
-    
-    Returns:
-        dict: Dados do item atualizado
-    """
-    result_put = Order.put_order(table=data.table, item_number=data.item, new_main_course=data.new_main_course, new_drink=data.new_drink, new_salad=data.new_salad)
+    result_put = Order.put_order(table=data.table, item_number=data.item, new_main_course=data.new_main_course, new_drink=data.new_drink, new_starter=data.new_starter)
 
     return result_put
 
 @app.delete('/delete/')
 def delete_command(data: DeleteUserSchema):
-    """
-    Deleta pedidos do sistema.
-    
-    Args:
-        table_number: Número da mesa para deletar (opcional)
-        item_number: Número do item específico para deletar (opcional)
-        type_of_choice: Tipo de deleção - 'all' para deletar todos os pedidos ou 'specific' para deletar pedido específico
-    
-    Returns:
-        str: Mensagem de confirmação da deleção
-    """
     return Order.delete_order(table_number=data.table_number, item_number=data.item_number, type_of_choice=data.type_of_choice)

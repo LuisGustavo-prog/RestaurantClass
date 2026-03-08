@@ -5,4 +5,4 @@ class PutUserSchema(BaseModel):
     item: int
     new_main_course: str = ''
     new_drink: str = ''
-    new_salad: str = ''
+    new_starter: str = ''
