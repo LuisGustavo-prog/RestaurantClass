@@ -3,6 +3,7 @@ from src.schema.delete_user_schema import DeleteUserSchema
 from src.schema.put_user_schema import PutUserSchema
 from src.schema.post_user_schema import PostUserSchema 
 from fastapi import FastAPI
+from src.entities.menu import Menu
 
 app = FastAPI(
     title="API Comanda - Sistema de Pedidos",
@@ -11,6 +12,19 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+@app.get('/menu/')
+def get_menu():
+    return Menu.get_menu()
+
+@app.get('/menu/category/')
+def get_menu_by_category(category: str):
+    return Menu.get_by_category(category=category)
+
+@app.get('/menu/name/')
+def get_menu_by_name(name: str):
+    return Menu.get_by_name(name=name)
+
 
 @app.post('/post/')
 def post_command(data: PostUserSchema): # Mudar para schema

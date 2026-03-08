@@ -1,36 +1,42 @@
-from src.utils.id_generator import IDGenerato
+from src.database.connection import orders_collection, menu_collection
 from datetime import datetime
 
 class Item:
-    _order_list = []
-    
     @classmethod
-    def add_item(cls, table_number: int, order_id: int = '', main_course: str = '', drink: str = '', salad: str = '') -> None:
-        if order_id == '':
-            order_id = IDGenerato.get_or_create_order_id(table_number=table_number)
-    
+    def add_item(cls, table_number: int, main_course: str = '', drink: str = '', starter: str = ''):
+        main_course_data = menu_collection.find_one({'name': main_course})
+        drink_data       = menu_collection.find_one({'name': drink})
+        starter_data     = menu_collection.find_one({'name': starter})
+        
         new_item = {
-            'item_number': 1,
-            'main_course': main_course,
-            'drink': drink,
-            'salad': salad
+            'main_course':       main_course,
+            'main_course_price': main_course_data['price'] if main_course_data else 0,
+            'drink':             drink,
+            'drink_price':       drink_data['price']       if drink_data       else 0,
+            'starter':           starter,
+            'starter_price':     starter_data['price']     if starter_data     else 0,
         }
 
-        table_order = None
-        for order in cls._order_list:
-            if order['table_number'] == table_number and order['order_id'] == order_id:
-                table_order = order # Armazenando a referência da lista.
-                break
+        item_total = new_item['main_course_price'] + new_item['drink_price'] + new_item['starter_price']
+
+        table_order = orders_collection.find_one({
+            'table_number': table_number,
+        })
 
         if table_order is None:
-            cls._order_list.append({
+            orders_collection.insert_one({
                 'table_number': table_number,
-                'order_id': order_id,
                 'creation_date': datetime.now().strftime('%d/%m/%Y'),
                 'creation_time': datetime.now().strftime('%H:%M:%S'),
+                'total_items': 1,
+                'total_price': item_total,
                 'items': [new_item]
             })
         else:
-            new_item['item_number'] = len(table_order['items']) + 1  
-            table_order['items'].append(new_item)
-        
+            orders_collection.update_one(
+                {'table_number': table_number},
+                {
+                    '$push': {'items': new_item},
+                    '$inc': {'total_items': 1, 'total_price': item_total}
+                }
+            )
