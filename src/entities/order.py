@@ -35,25 +35,31 @@ class Order:
         return list(orders_collection.find({}, {'_id': 0}))
 
     @classmethod
-    def put_order(cls, table_number: int, item_id: int, new_main_course: str = '', new_drink: str = '', new_starter: str = ''):
+    def put_order(cls, table_number: int, item_id: int, new_main_course: str = None, new_drink: str = None, new_starter: str = None):
         order = orders_collection.find_one({'table_number': table_number}, {'_id': 0})
 
         if order is None:
             return {'error': True, 'message': f'Table {table_number} not found.'}
         
-        new_main_course_data = menu_collection.find_one({'name': new_main_course})
-        new_drink_data       = menu_collection.find_one({'name': new_drink})
-        new_starter_data     = menu_collection.find_one({'name': new_starter})
+        updated_fields = {}
+
+        if new_main_course:
+            new_main_course_data = menu_collection.find_one({'name': new_main_course})
+            updated_fields['items.$.main_course'] = new_main_course
+            updated_fields['items.$.main_course_price'] = new_main_course_data['price'] if new_main_course_data else 0
+
+        if new_drink:
+            new_drink_data = menu_collection.find_one({'name': new_drink})
+            updated_fields['items.$.drink'] = new_drink
+            updated_fields['items.$.drink_price'] = new_drink_data['price'] if new_drink_data else 0
+    
+        if new_starter:
+            new_starter_data = menu_collection.find_one({'name': new_starter})
+            updated_fields['items.$.starter'] = new_starter
+            updated_fields['items.$.starter_price'] = new_starter_data['price'] if new_starter_data else 0
 
         orders_collection.update_one({'table_number': table_number, 'items.item_id': item_id}, {
-            '$set': {
-                'items.$.main_course':       new_main_course,
-                'items.$.main_course_price': new_main_course_data['price'] if new_main_course_data else 0,
-                'items.$.drink':             new_drink,
-                'items.$.drink_price':       new_drink_data['price']       if new_drink_data       else 0,
-                'items.$.starter':           new_starter,
-                'items.$.starter_price':     new_starter_data['price']     if new_starter_data     else 0,
-            }
+            '$set': updated_fields
         })
 
         order_update = orders_collection.find_one({'table_number': table_number})
