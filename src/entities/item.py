@@ -1,9 +1,9 @@
-from src.database.connection import orders_collection, menu_collection
+from src.database.connection import orders_collection, menu_collection, waiter_collection
 from datetime import datetime
 
 class Item:
     @classmethod
-    def add_item(cls, table_number: int, main_course: str = '', drink: str = '', starter: str = ''):
+    def add_item(cls, table_number: int, waiter_id: int, main_course: str = '', drink: str = '', starter: str = ''):
         main_course_data = menu_collection.find_one({'name': main_course})
         drink_data       = menu_collection.find_one({'name': drink})
         starter_data     = menu_collection.find_one({'name': starter})
@@ -24,9 +24,15 @@ class Item:
 
         item_total = new_item['main_course_price'] + new_item['drink_price'] + new_item['starter_price']
 
+        waiter = waiter_collection.find_one({'waiter_id': waiter_id}, {'_id': 0})
+
+        if waiter is None:
+            return {'error': True, 'message': f'Waiter {waiter_id} not found.'}
+
         if table_order is None:
             orders_collection.insert_one({
                 'table_number': table_number,
+                'waiter_id': waiter_id,
                 'creation_date': datetime.now().strftime('%d/%m/%Y'),
                 'creation_time': datetime.now().strftime('%H:%M:%S'),
                 'total_items': 1,

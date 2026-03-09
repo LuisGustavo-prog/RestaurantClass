@@ -5,7 +5,7 @@ from src.schema.post_user_schema import PostUserSchema
 from src.schema.put_user_schema import PutUserSchema
 
 def controller_create_order(data: PostUserSchema):
-    Order(table_number=data.table_number, main_course=data.main_course, drink=data.drink, starter=data.starter)
+    Order(table_number=data.table_number, waiter_id=data.waiter_id, main_course=data.main_course, drink=data.drink, starter=data.starter)
     return data
 
 def controller_get_order(table_number: int = None):

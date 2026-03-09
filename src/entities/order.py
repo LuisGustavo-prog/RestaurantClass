@@ -2,22 +2,24 @@ from src.database.connection import orders_collection, menu_collection
 from src.entities.item import Item
 
 class Order:
-    def __init__(self, table_number: int, main_course: str = '', drink: str = '', starter: str = ''):
+    def __init__(self, table_number: int, waiter_id: int, main_course: str = '', drink: str = '', starter: str = ''):
         self._table_number = table_number
+        self._waiter_id = waiter_id
         self._main_course = main_course
         self._drink = drink
         self._starter = starter
 
         Order.post_order(
         table_number= self._table_number,
+        waiter_id=self._waiter_id,
         main_course= self._main_course,
         drink= self._drink,
         starter= self._starter
     )
 
     @classmethod
-    def post_order(cls, table_number: int, main_course: str = '', drink: str = '', starter: str = '') -> None:
-        Item.add_item(table_number= table_number, main_course= main_course, drink= drink, starter= starter)
+    def post_order(cls, table_number: int, waiter_id, main_course: str = '', drink: str = '', starter: str = '') -> None:
+        Item.add_item(table_number= table_number, waiter_id=waiter_id, main_course= main_course, drink= drink, starter= starter)
         
     @classmethod
     def get_order(cls, table_number: int):        
