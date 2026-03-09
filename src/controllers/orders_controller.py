@@ -11,6 +11,9 @@ def controller_create_order(data: PostUserSchema):
 def controller_get_order(table_number: int = None):
     return Order.get_order(table_number=table_number)
 
+def controller_get_all_order():
+    return Order.get_all_orders()
+
 def controller_update_order(data: PutUserSchema):
     return Order.put_order(table_number=data.table_number, item_id=data.item_id, new_main_course=data.new_main_course, new_drink=data.new_drink, new_starter=data.new_starter)
 

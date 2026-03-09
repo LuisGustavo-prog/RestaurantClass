@@ -20,16 +20,17 @@ class Order:
         Item.add_item(table_number= table_number, main_course= main_course, drink= drink, starter= starter)
         
     @classmethod
-    def get_order(cls, table_number: int = None):
-        if table_number is None:
-            return list(orders_collection.find({}, {'_id': 0}))
-        
+    def get_order(cls, table_number: int):        
         order = orders_collection.find_one({'table_number': table_number}, {'_id': 0})
 
         if order is None:
             return {'error': True, 'message': f'Table {table_number} not found.'}
         
         return order
+    
+    @classmethod
+    def get_all_orders(cls):
+        return list(orders_collection.find({}, {'_id': 0}))
 
     @classmethod
     def put_order(cls, table_number: int, item_id: int, new_main_course: str = '', new_drink: str = '', new_starter: str = ''):

@@ -5,6 +5,7 @@ from src.schema.put_user_schema import PutUserSchema
 from src.controllers.orders_controller import (
     controller_create_order,
     controller_get_order,
+    controller_get_all_order,
     controller_update_order,
     controller_delete_order,
     controller_delete_item
@@ -19,6 +20,10 @@ def create_order(data: PostUserSchema):
 @orders.get('/orders/')
 def get_order(table_number: int = None):
     return controller_get_order(table_number=table_number)
+
+@orders.get('/orders/all/')
+def get_all_orders():
+    return controller_get_all_order()
 
 @orders.put('/orders/')
 def update_order(data: PutUserSchema):
