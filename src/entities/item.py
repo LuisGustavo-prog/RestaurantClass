@@ -27,7 +27,7 @@ class Item:
         waiter = waiter_collection.find_one({'waiter_id': waiter_id}, {'_id': 0})
 
         if waiter is None:
-            return {'error': True, 'message': f'Waiter {waiter_id} not found.'}
+            raise ValueError(f'Waiter {waiter_id} not found.')
 
         if table_order is None:
             orders_collection.insert_one({
