@@ -18,7 +18,10 @@ def controller_get_all_order():
     return Order.get_all_orders()
 
 def controller_update_order(data: PutUserSchema):
-    return Order.put_order(table_number=data.table_number, item_id=data.item_id, new_main_course=data.new_main_course, new_drink=data.new_drink, new_starter=data.new_starter)
+    try:
+        return Order.put_order(table_number=data.table_number, item_id=data.item_id, new_main_course=data.new_main_course, new_drink=data.new_drink, new_starter=data.new_starter)
+    except ValueError as e:
+        return {'error': True, 'message': str(e)}
 
 def controller_delete_order(data: DeleteOrderSchema):
     return Order.delete_order(table_number=data.table_number)

@@ -35,11 +35,35 @@ class Order:
         return list(orders_collection.find({}, {'_id': 0}))
 
     @classmethod
-    def put_order(cls, table_number: int, item_id: int, new_main_course: str = None, new_drink: str = None, new_starter: str = None):
+    def put_order(cls, table_number: int, item_id: int, new_main_course: str = '', new_drink: str = '', new_starter: str = ''):
+        new_main_course_data = None
+        new_drink_data = None
+        new_starter_data = None
+
+        if new_main_course:
+            new_main_course_data = menu_collection.find_one({'name': new_main_course})
+            if new_main_course_data is None:
+                raise ValueError(f'{new_main_course} not found in menu.')
+            
+        if new_drink:
+            new_drink_data = menu_collection.find_one({'name': new_drink})
+            if new_drink_data is None:
+                raise ValueError(f'{new_drink} not found in menu.')
+            
+        if new_starter:
+            new_starter_data = menu_collection.find_one({'name': new_starter})
+            if new_starter_data is None:
+                raise ValueError(f'{new_starter} not found in menu.')
+        
         order = orders_collection.find_one({'table_number': table_number}, {'_id': 0})
+
+        item = next((i for i in order['items'] if i['item_id'] == item_id), None)
 
         if order is None:
             return {'error': True, 'message': f'Table {table_number} not found.'}
+
+        if item is None:
+            return {'error': True, 'message': f'Item {item_id} not found.'}
         
         updated_fields = {}
 
