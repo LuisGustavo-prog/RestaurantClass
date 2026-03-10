@@ -18,7 +18,7 @@ class Order:
     )
 
     @classmethod
-    def post_order(cls, table_number: int, waiter_id, main_course: str = '', drink: str = '', starter: str = '') -> None:
+    def post_order(cls, table_number: int, waiter_id, main_course: str = None, drink: str = None, starter: str = None) -> None:
         Item.add_item(table_number= table_number, waiter_id=waiter_id, main_course= main_course, drink= drink, starter= starter)
         
     @classmethod

@@ -4,13 +4,34 @@ from datetime import datetime
 class Item:
     @classmethod
     def add_item(cls, table_number: int, waiter_id: int, main_course: str = '', drink: str = '', starter: str = ''):
-        main_course_data = menu_collection.find_one({'name': main_course})
-        drink_data       = menu_collection.find_one({'name': drink})
-        starter_data     = menu_collection.find_one({'name': starter})
+        main_course_data = None
+        drink_data = None
+        starter_data = None
+
+        if main_course:
+            main_course_data = menu_collection.find_one({'name': main_course})
+            if main_course_data is None:
+                raise ValueError(f'{main_course} not found in menu.')
+
+        if drink:
+            drink_data = menu_collection.find_one({'name': drink})
+            if drink_data is None:
+                raise ValueError(f'{drink} not found in menu.')
+
+        if starter:
+            starter_data = menu_collection.find_one({'name': starter})
+            if starter_data is None:
+                raise ValueError(f'{starter} not found in menu.')
+
+        waiter = waiter_collection.find_one({'waiter_id': waiter_id}, {'_id': 0})
+
+        if waiter is None:
+            raise ValueError(f'Waiter {waiter_id} not found.')
 
         table_order = orders_collection.find_one({
             'table_number': table_number,
         })
+
         
         new_item = {
             'item_id':           1 if table_order is None else len(table_order['items']) + 1,
@@ -23,11 +44,6 @@ class Item:
         }
 
         item_total = new_item['main_course_price'] + new_item['drink_price'] + new_item['starter_price']
-
-        waiter = waiter_collection.find_one({'waiter_id': waiter_id}, {'_id': 0})
-
-        if waiter is None:
-            raise ValueError(f'Waiter {waiter_id} not found.')
 
         if table_order is None:
             orders_collection.insert_one({
