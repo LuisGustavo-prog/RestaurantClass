@@ -1,4 +1,4 @@
-from src.entities.waiter import Waiter
+from src.models.waiter import Waiter
 from src.schema.waiter_schema import (
     CreateWaiterSchema,
     UpdateWaiterSchema,

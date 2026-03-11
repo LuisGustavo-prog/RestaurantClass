@@ -1,4 +1,4 @@
-from src.entities.menu import Menu
+from src.models.menu import Menu
 
 def controller_get_menu():
     return Menu.get_menu()

@@ -6,4 +6,5 @@ class PutUserSchema(BaseModel):
     new_main_course: str = ''
     new_drink: str = ''
     new_starter: str = ''
+    new_dessert: str = ''
     

@@ -6,3 +6,4 @@ class PostUserSchema(BaseModel):
     main_course: str = ''
     drink: str = ''
     starter: str = ''
+    dessert: str = ''
