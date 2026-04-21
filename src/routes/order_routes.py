@@ -11,7 +11,7 @@ from src.controllers.orders_controller import (
     controller_delete_item
 )
 
-orders = APIRouter()
+orders = APIRouter(tags=["Orders"])
 
 @orders.post('/orders/')
 def create_order(data: PostUserSchema):

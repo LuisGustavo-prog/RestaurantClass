@@ -12,7 +12,7 @@ from src.schema.waiter_schema import (
     DeleteWaiterSchema
 )
 
-waiter = APIRouter()
+waiter = APIRouter(tags=["Waiters"])
 
 @waiter.post('/waiters/')
 def create_waiter(data: CreateWaiterSchema):

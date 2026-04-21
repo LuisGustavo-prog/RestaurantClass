@@ -5,7 +5,7 @@ from src.controllers.menu_controller import (
     controller_get_menu_by_name
 )
 
-menu = APIRouter()
+menu = APIRouter(tags=["Menu"])
 
 @menu.get('/menu/')
 def get_menu():

@@ -1,7 +1,7 @@
 from validate_docbr import CPF
 import re
 
-def cpf_validator(cpf: str) -> str:
+def cpf_validator(cpf: str):
     validador = CPF()
     
     if validador.validate(cpf):
@@ -30,7 +30,7 @@ def name_validator(name: str) -> str:
 
     return name
 
-def email_validator(email: str) -> str:
+def email_validator(email: str):
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     
     if not re.match(pattern, email):
@@ -38,7 +38,7 @@ def email_validator(email: str) -> str:
     
     return email
 
-def phone_number_validator(phone_number: str) -> str:
+def phone_number_validator(phone_number: str):
     pattern = r'^\(?\d{2}\)?[\s-]?\d{4,5}[\s-]?\d{4}$'
 
     if not re.match(pattern, phone_number):
